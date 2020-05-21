@@ -81,7 +81,7 @@ if (MSVC)
     # find the shared boost libs
     add_definitions(-DBOOST_ALL_DYN_LINK)
     # set postfix for debug libs
-    if(NOT CMAKE_DEBUG_POSTFIX)
+    if(NOT CMAKE_DEBUG_POSTFIX AND ENABLE_LIB_NAMING)
         set(CMAKE_DEBUG_POSTFIX d)
     endif()
 endif()
