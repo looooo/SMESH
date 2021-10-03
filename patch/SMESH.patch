@@ -107,3 +107,19 @@ diff --git a/src/SMDS/SMDS_UnstructuredGrid.hxx b/src/SMDS/SMDS_UnstructuredGrid
  #include <smIdType.hxx>
  
  #include <vector>
+diff --git a/src/SMDS/SMDS_MeshElement.hxx b/src/SMDS/SMDS_MeshElement.hxx
+--- a/src/SMDS/SMDS_MeshElement.hxx
++++ b/src/SMDS/SMDS_MeshElement.hxx
+@@ -188,11 +188,11 @@ public:
+ 
+   SMDS_UnstructuredGrid* getGrid() const;
+ 
+  protected:
+ 
+-  SMDS_ElementChunk* myHolder;
++  SMDS_ElementChunk* myHolder = nullptr;
+ };
+ 
+ // ============================================================
+ /*!
+  * \brief Comparator of elements by ID for usage in std containers

@@ -12,6 +12,7 @@ cmake -G "Ninja" \
       ${CMAKE_PLATFORM_FLAGS[@]} \
       -D CMAKE_INSTALL_PREFIX:FILEPATH=$PREFIX \
       -D CMAKE_PREFIX_PATH:FILEPATH=$PREFIX \
+      -D ENABLE_NETGEN:BOOL=true \
       ..
 
 ninja install
@@ -19,11 +20,6 @@ ninja install
 cd ..
 cd tests
 ./test_Catch
-if [[ ${HOST} =~ .*apple.* ]]
-then
-    echo "Skipping SMESH tests on OSX until they are fixed..."
-else
-    ./test_StdMeshers
-    ./test_NETGENPlugin
-    ./test_MEFISTO2
-fi
+./test_StdMeshers
+./test_NETGENPlugin
+./test_MEFISTO2
