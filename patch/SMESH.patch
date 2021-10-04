@@ -123,3 +123,16 @@ diff --git a/src/SMDS/SMDS_MeshElement.hxx b/src/SMDS/SMDS_MeshElement.hxx
  // ============================================================
  /*!
   * \brief Comparator of elements by ID for usage in std containers
+diff --git a/src/SMDS/SMDS_ElementFactory.cxx b/src/SMDS/SMDS_ElementFactory.cxx
+--- a/src/SMDS/SMDS_ElementFactory.cxx
++++ b/src/SMDS/SMDS_ElementFactory.cxx
+@@ -542,7 +542,8 @@ SMDS_ElementChunk::SMDS_ElementChunk( SMDS_ElementFactory* factory, smIdType id0
+ 
+ SMDS_ElementChunk::~SMDS_ElementChunk()
+ {
+-  delete [] myElements;
++  // printf("~SMDS_ElementChunk: %p\n", this);
++  // delete [] myElements;
+   myFactory->myChunksWithUnused.erase( this );
+ }
+ 
