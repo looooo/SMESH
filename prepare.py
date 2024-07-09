@@ -57,11 +57,11 @@ def prepare_kernel():
     target = os.path.join('src/Kernel', 'CMakeLists.txt')
     shutil.copyfile('cmake/Kernel/CMakeLists.txt', target)
 
-    # Patch sources
-    pset = patch.fromfile('patch/Kernel.patch')
-    success = pset.apply(strip=0, root='src/Kernel')
-    if not success:
-        raise RuntimeError('Failed to apply Kernel patch.')
+    # # Patch sources
+    # pset = patch.fromfile('patch/Kernel.patch')
+    # success = pset.apply(strip=0, root='src/Kernel')
+    # if not success:
+    #     raise RuntimeError('Failed to apply Kernel patch.')
 
 
 def prepare_geom():
@@ -80,11 +80,11 @@ def prepare_geom():
     target = os.path.join('src/Geom', 'CMakeLists.txt')
     shutil.copyfile('cmake/Geom/CMakeLists.txt', target)
 
-    # Patch sources
-    pset = patch.fromfile('patch/GEOMUtils.patch')
-    success = pset.apply(strip=0, root='src/Geom')
-    if not success:
-        raise RuntimeError('Failed to apply GEOMUtils patch.')
+    # # Patch sources
+    # pset = patch.fromfile('patch/GEOMUtils.patch')
+    # success = pset.apply(strip=0, root='src/Geom')
+    # if not success:
+    #     raise RuntimeError('Failed to apply GEOMUtils patch.')
 
 
 def prepare_smesh():
@@ -103,61 +103,61 @@ def prepare_smesh():
     target = os.path.join('src/SMESH', 'CMakeLists.txt')
     shutil.copyfile('cmake/SMESH/CMakeLists.txt', target)
 
-    # Patch sources
-    pset = patch.fromfile('patch/mefisto.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply mefisto patch.')
+    # # Patch sources
+    # pset = patch.fromfile('patch/mefisto.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply mefisto patch.')
 
-    pset = patch.fromfile('patch/SMESH_ControlPnt.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_ControlPnt patch.')
+    # pset = patch.fromfile('patch/SMESH_ControlPnt.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_ControlPnt patch.')
 
-    pset = patch.fromfile('patch/SMESH_Controls.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_Controls patch.')
+    # pset = patch.fromfile('patch/SMESH_Controls.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_Controls patch.')
 
-    pset = patch.fromfile('patch/SMESH_Mesh.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_Mesh patch.')
+    # pset = patch.fromfile('patch/SMESH_Mesh.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_Mesh patch.')
 
-    pset = patch.fromfile('patch/SMESH_MeshAlgos.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_MeshAlgos patch.')
+    # pset = patch.fromfile('patch/SMESH_MeshAlgos.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_MeshAlgos patch.')
 
-    pset = patch.fromfile('patch/SMESH_Slot.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_Slot patch.')
+    # pset = patch.fromfile('patch/SMESH_Slot.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_Slot patch.')
 
-    pset = patch.fromfile('patch/SMESH_SMDS.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_SMDS patch.')
+    # pset = patch.fromfile('patch/SMESH_SMDS.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_SMDS patch.')
 
-    pset = patch.fromfile('patch/StdMeshers_Adaptive1D.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply StdMeshers_Adaptive1D patch.')
+    # pset = patch.fromfile('patch/StdMeshers_Adaptive1D.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply StdMeshers_Adaptive1D patch.')
 
-    pset = patch.fromfile('patch/StdMeshers_Projection_2D.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply StdMeshers_Projection_2D patch.')
+    # pset = patch.fromfile('patch/StdMeshers_Projection_2D.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply StdMeshers_Projection_2D patch.')
 
-    pset = patch.fromfile('patch/StdMeshers_ViscousLayers.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply StdMeshers_ViscousLayers patch.')
+    # pset = patch.fromfile('patch/StdMeshers_ViscousLayers.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply StdMeshers_ViscousLayers patch.')
 
-    pset = patch.fromfile('patch/SMESH_swap_bool_vector.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply SMESH_swap_bool_vector patch.')
+    # pset = patch.fromfile('patch/SMESH_swap_bool_vector.patch')
+    # success = pset.apply(strip=0, root='src/SMESH')
+    # if not success:
+    #     raise RuntimeError('Failed to apply SMESH_swap_bool_vector patch.')
 
     # Copy MeshVSLink sources
     shutil.copytree('extra/MeshVSLink',
@@ -179,11 +179,11 @@ def prepare_netgen_plugin():
     shutil.copytree('external/NETGENPlugin/src',
                     'src/SMESH/src/NETGENPlugin/src')
 
-    # Patch sources
-    pset = patch.fromfile('patch/NETGENPlugin_Mesher.patch')
-    success = pset.apply(strip=0, root='src/SMESH/src/NETGENPlugin')
-    if not success:
-        raise RuntimeError('Failed to apply NETGENPlugin_Mesher patch.')
+    # # Patch sources
+    # pset = patch.fromfile('patch/NETGENPlugin_Mesher.patch')
+    # success = pset.apply(strip=0, root='src/SMESH/src/NETGENPlugin')
+    # if not success:
+    #     raise RuntimeError('Failed to apply NETGENPlugin_Mesher patch.')
 
 
 if __name__ == '__main__':
