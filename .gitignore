@@ -88,4 +88,6 @@ venv/
 ENV/
 
 # Spyder project settings
-.spyderproject
+.spyderproject# pixi environments
+.pixi
+*.egg-info
