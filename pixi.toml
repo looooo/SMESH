@@ -11,19 +11,26 @@ initialize = "git submodule update --init"
 prepare = "python prepare.py"
 configure = { cmd = ["cmake", 
                      "-S", ".", 
+                     "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$PREFIX",
                      "-B", "build"], depends-on = ["initialize", "prepare"]}
 build = { cmd = ["make", "-C", "build"], depends-on = ["configure"] }
+install = { cmd = ["make", "-C", "build", "install"], depends-on = ["build"] }
+
 build_only = { cmd = ["make", "-C", "build"] }
 configure_only = { cmd = ["cmake", 
                           "-S", ".", 
                           "-B", "build"]} 
 clean = { cmd = ["rm", "-r", "build"]}
+test_only = { cmd = ["cmake", 
+                     "-S", "test/.", 
+                     "-B", "test/build"]}
 
 [dependencies]
 vtk = ">=9.3.1,<9.4"
 occt = ">=7.8.1,<7.9"
 libzlib = ">=1.3.1,<1.4"
 libboost-devel = ">=1.85.0,<1.86"
+catch2 = ">=3.6.0,<3.7"
 
 [build-dependencies]
 cmake = ">=3.30.0,<3.31"
