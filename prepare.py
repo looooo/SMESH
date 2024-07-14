@@ -63,6 +63,12 @@ def prepare_kernel():
     if not success:
         raise RuntimeError('Failed to apply Kernel patch.')
 
+    # Patch sources
+    pset = patch.fromfile('patch/Kernel_occt781.patch')
+    success = pset.apply(strip=0, root='src/Kernel')
+    if not success:
+        raise RuntimeError('Failed to apply occt7.8.1 patch for Kernel.')
+
 
 def prepare_geom():
     """
@@ -153,6 +159,11 @@ def prepare_smesh():
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
         raise RuntimeError('Failed to apply StdMeshers_ViscousLayers patch.')
+
+    pset = patch.fromfile('patch/SMESH_occt781.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply occ7.8.1 patch for SMESH.')
 
     # Copy MeshVSLink sources
     shutil.copytree('extra/MeshVSLink',
