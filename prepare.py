@@ -160,17 +160,17 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply StdMeshers_ViscousLayers patch.')
 
-    pset = patch.fromfile('patch/SMESH_occt781.patch')
-    success = pset.apply(strip=0, root='src/SMESH')
-    if not success:
-        raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
-
     # Copy MeshVSLink sources
     shutil.copytree('extra/MeshVSLink',
                     'src/SMESH/src/MeshVSLink', dirs_exist_ok=True)
 
     # Copy MEFISTO2 trte.c source
     shutil.copyfile('extra/MEFISTO2/trte.c', 'src/SMESH/src/MEFISTO2/trte.c')
+
+    pset = patch.fromfile('patch/SMESH_occt781.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
 
 
 def prepare_netgen_plugin():
