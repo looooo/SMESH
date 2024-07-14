@@ -14,6 +14,10 @@ configure = { cmd = ["cmake",
                      "-D", "ENABLE_NETGEN:BOOL=FALSE"], depends-on = ["prepare"]}
 build = { cmd = ["make", "-C", "build"], depends-on = ["configure"] }
 build_only = { cmd = ["make", "-C", "build"] }
+configure_only = { cmd = ["cmake", 
+                          "-S", ".", 
+                          "-B", "build",
+                          "-D", "ENABLE_NETGEN:BOOL=FALSE"]} 
 clean = { cmd = ["rm", "-r", "build"]}
 
 [dependencies]
