@@ -7,11 +7,12 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64"]
 
 [tasks]
+initialize = "git submodule update init"
 prepare = "python prepare.py"
 configure = { cmd = ["cmake", 
                      "-S", ".", 
                      "-B", "build",
-                     "-D", "ENABLE_NETGEN:BOOL=FALSE"], depends-on = ["prepare"]}
+                     "-D", "ENABLE_NETGEN:BOOL=FALSE"], depends-on = ["initialize", "prepare"]}
 build = { cmd = ["make", "-C", "build"], depends-on = ["configure"] }
 build_only = { cmd = ["make", "-C", "build"] }
 configure_only = { cmd = ["cmake", 
