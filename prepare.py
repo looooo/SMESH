@@ -196,5 +196,5 @@ if __name__ == '__main__':
     prepare_netgen()
     prepare_kernel()
     prepare_geom()
-    prepare_smesh()
     prepare_netgen_plugin()
+    prepare_smesh()
