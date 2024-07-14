@@ -36,6 +36,11 @@ def prepare_netgen():
     shutil.copyfile('extra/Netgen/netgen_version.hpp',
                     'src/Netgen/libsrc/include/netgen_version.hpp')
 
+    # Patch for OCCT 7.8.1
+    pset = patch.fromfile('patch/netgen_occt781.patch')
+    success = pset.apply(strip=0, root='src/Netgen')
+    if not success:
+        raise RuntimeError('Failed to apply occt7.8.1 patch for Netgen.')
 
 def prepare_kernel():
     """
