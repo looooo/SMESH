@@ -196,10 +196,16 @@ def prepare_netgen_plugin():
     if not success:
         raise RuntimeError('Failed to apply NETGENPlugin_Mesher patch.')
 
+    # Patch sources
+    pset = patch.fromfile('patch/NETGENPlugin_occt781.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
+
 
 if __name__ == '__main__':
     prepare_netgen()
     prepare_kernel()
     prepare_geom()
-    prepare_netgen_plugin()
     prepare_smesh()
+    prepare_netgen_plugin()
