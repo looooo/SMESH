@@ -163,7 +163,7 @@ def prepare_smesh():
     pset = patch.fromfile('patch/SMESH_occt781.patch')
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
-        raise RuntimeError('Failed to apply occ7.8.1 patch for SMESH.')
+        raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
 
     # Copy MeshVSLink sources
     shutil.copytree('extra/MeshVSLink',
