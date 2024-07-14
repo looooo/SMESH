@@ -1,0 +1,35 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ca6c6f4..a39356f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -240,8 +240,8 @@ ADD_LIBRARY(nglib4smesh SHARED
+ 
+ # Link
+ SET(OCCLIBS TKernel TKGeomBase TKMath TKG2d TKG3d TKXSBase TKOffset TKFillet TKShHealing)
+-SET(OCCLIBS ${OCCLIBS} TKMesh TKMeshVS TKTopAlgo TKGeomAlgo TKBool TKPrim TKBO TKIGES TKBRep)
+-SET(OCCLIBS ${OCCLIBS} TKSTEPBase TKSTEP TKSTL TKSTEPAttr TKSTEP209 TKXDESTEP TKXDEIGES TKXCAF TKLCAF)
++SET(OCCLIBS ${OCCLIBS} TKMesh TKMeshVS TKTopAlgo TKGeomAlgo TKBool TKPrim TKBO TKBRep)
++SET(OCCLIBS ${OCCLIBS} TKXCAF TKLCAF TKDESTL TKDEIGES TKDESTEP)
+ 
+ TARGET_LINK_LIBRARIES(nglib4smesh PUBLIC ${OCCLIBS} ${ZLIB_LIBRARIES} ${PLATFORM_LIBADD})
+ target_include_directories(nglib4smesh PUBLIC
+diff --git a/libsrc/occ/Partition_Loop3d.hxx b/libsrc/occ/Partition_Loop3d.hxx
+index e171669..aea8734 100644
+--- a/libsrc/occ/Partition_Loop3d.hxx
++++ b/libsrc/occ/Partition_Loop3d.hxx
+@@ -26,12 +26,9 @@
+ #include <Standard_Version.hxx>
+ #endif
+ 
+-#if OCC_VERSION_HEX < 0x070000
+-#else
+-   #include <TopTools_ShapeMapHasher.hxx>
+-   #include <TopTools_OrientedShapeMapHasher.hxx>
+-   #include <TopTools_MapOfOrientedShape.hxx>
+-#endif
++
++#include <TopTools_MapOfOrientedShape.hxx>
++
+ 
+ class TopoDS_Shape;
+ 
