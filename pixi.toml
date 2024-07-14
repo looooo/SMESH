@@ -7,7 +7,7 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64"]
 
 [tasks]
-initialize = "git submodule update init"
+initialize = "git submodule update --init"
 prepare = "python prepare.py"
 configure = { cmd = ["cmake", 
                      "-S", ".", 
