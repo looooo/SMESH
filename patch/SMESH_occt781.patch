@@ -87,9 +87,18 @@ index cdad7ab..9aaca97 100644
  #include <Standard_Real.hxx>
  #include <Standard_Version.hxx>
 diff --git a/src/SMESH/SMESH_MeshEditor.cxx b/src/SMESH/SMESH_MeshEditor.cxx
-index f97e645..802fd8d 100644
+index f97e645..a5b1648 100644
 --- a/src/SMESH/SMESH_MeshEditor.cxx
 +++ b/src/SMESH/SMESH_MeshEditor.cxx
+@@ -4307,7 +4307,7 @@ void SMESH_MeshEditor::sweepElement(const SMDS_MeshElement*               elem,
+         std::swap( itNN[0],    itNN[1] );
+         std::swap( prevNod[0], prevNod[1] );
+         std::swap( nextNod[0], nextNod[1] );
+-        std::swap( isSingleNode[0], isSingleNode[1] );
++        std::vector<bool>::swap( isSingleNode[0], isSingleNode[1] );
+         if ( nbSame > 0 )
+           sames[0] = 1 - sames[0];
+         iNotSameNode = 1 - iNotSameNode;
 @@ -7459,6 +7459,8 @@ bool SMESH_MeshEditor::applyMerge( const SMDS_MeshElement* elem,
  // purpose : allow comparing elements basing on their nodes
  // ========================================================
