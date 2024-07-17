@@ -10,25 +10,24 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 initialize = "git submodule update --init"
 prepare = "python prepare.py"
 configure = { cmd = ["cmake", 
-                     "-S", ".", 
+                     "-S", ".",
+                     "-D", "CMAKE_BUILD_TYPE='Debug'",
                      "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$CONDA_PREFIX",
+                     "-D", "ENABLE_NETGEN=ON",
                      "-B", "build"], depends-on = ["initialize", "prepare"]}
-build = { cmd = ["make", "-C", "build"], depends-on = ["configure"] }
+build = { cmd = ["make", "-C", "build", "-j4"], depends-on = ["configure"] }
 install = { cmd = ["make", "-C", "build", "install"], depends-on = ["build"] }
-
 build_only = { cmd = ["make", "-C", "build"] }
-configure_only = { cmd = ["cmake", 
-                          "-S", ".", 
-                          "-B", "build"]} 
+
 clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"]}
 
 ### Test tasks
 configure_tests = { cmd = ["cmake", 
                            "-S", "test/.",
                            "-D", "CMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON",
+                           "-D", "CMAKE_BUILD_TYPE='Debug'",
                            "-B", "test/build"]}
-install_tests = { cmd = ["make", 
-                         "-C", "test/build",
+install_tests = { cmd = ["make", "-C", "test/build", "-j4", 
                          "install"], depends-on = ["configure_tests"]}
 run_tests = { cmd = "./test/tests/test_MEFISTO2"}
 
