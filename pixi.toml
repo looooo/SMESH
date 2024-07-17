@@ -7,29 +7,36 @@ channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
 [tasks]
+
+## build tasks
 initialize = "git submodule update --init"
 prepare = "python prepare.py"
 configure = { cmd = ["cmake", 
                      "-S", ".",
                      "-D", "CMAKE_BUILD_TYPE='Debug'",
                      "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$CONDA_PREFIX",
+                     "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                      "-D", "ENABLE_NETGEN=ON",
                      "-B", "build"], depends-on = ["initialize", "prepare"]}
-build = { cmd = ["make", "-C", "build", "-j4"], depends-on = ["configure"] }
-install = { cmd = ["make", "-C", "build", "install"], depends-on = ["build"] }
-build_only = { cmd = ["make", "-C", "build"] }
+build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
 
-clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"]}
-
-### Test tasks
+## test tasks
 configure_tests = { cmd = ["cmake", 
                            "-S", "test/.",
-                           "-D", "CMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON",
                            "-D", "CMAKE_BUILD_TYPE='Debug'",
+                           "-D", "CMAKE_PREFIX_PATH=$CONDA_PREFIX",
+                           "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                            "-B", "test/build"]}
-install_tests = { cmd = ["make", "-C", "test/build", "-j4", 
+build_tests = { cmd = ["make", "-C", "test/build", "-j4", 
                          "install"], depends-on = ["configure_tests"]}
-run_tests = { cmd = "./test/tests/test_MEFISTO2"}
+test = { cmd = ["./test/tests/test_Catch", "&&",
+                     "./test/tests/test_MEFISTO2", "&&", 
+                     "./test/tests/test_StdMeshers", "&&",
+                     "./test/tests/test_NETGENPlugin"], depends-on = ["build_tests"] }
+
+## clean tasks
+clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"] }
+
 
 [dependencies]
 vtk = ">=9.3.1,<9.4"
