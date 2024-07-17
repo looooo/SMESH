@@ -24,13 +24,13 @@ clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"]}
 
 ### Test tasks
 configure_tests = { cmd = ["cmake", 
-                     "-S", "test/.",
-                     "-D", "CMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON",
-                     "-B", "test/build"]}
+                           "-S", "test/.",
+                           "-D", "CMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON",
+                           "-B", "test/build"]}
 install_tests = { cmd = ["make", 
                          "-C", "test/build",
-                         "install"], depends-on = ["configure_tests"] }
-run_tests = "./test/tests/test_MEFISTO2"
+                         "install"], depends-on = ["configure_tests"]}
+run_tests = { cmd = "./test/tests/test_MEFISTO2"}
 
 [dependencies]
 vtk = ">=9.3.1,<9.4"
