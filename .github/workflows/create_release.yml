@@ -2,11 +2,13 @@ name: create release
 
 on:
   push:
-    branches:    
-      - '*' 
-  schedule:
-   - cron: "0 0 * * *"
-  workflow_dispatch:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  release:
+    types: [published]
 
 
 jobs:
@@ -19,8 +21,8 @@ jobs:
         submodules: true
 
     - name: Set output
-      id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      id: set_tag
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
     - uses: prefix-dev/setup-pixi@v0.8.1
       with:
         pixi-version: v0.25.0
@@ -32,6 +34,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: SMESH_*.tar.gz
-        tag: ${{ steps.vars.outputs.tag }}
+        tag: ${{ steps.set_tag.outputs.tag }}
         overwrite: true
         file_glob: true
