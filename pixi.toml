@@ -31,7 +31,8 @@ tar = "*"
 
 [feature.createsource.tasks]
 create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
-                         "src", "test", "CMakeLists.txt", "cmake/SMESHConfig.cmake.in"], depends-on = [ "prepare" ]}
+                         "src", "test", "CMakeLists.txt", "cmake/SMESHConfig.cmake.in", 
+                         "LICENSE.txt", "README.md"], depends-on = [ "prepare" ]}
 
 [feature.build.dependencies]
 vtk = ">=9.3.1,<9.4"
