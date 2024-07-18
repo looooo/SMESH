@@ -6,20 +6,18 @@ authors = ["looooo <sppedflyer@gmail.com>"]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
+[environments]
+tar = ["tar"]
 
-## TODO: find a better solution to add the tar dependency. tar is not available on windows
-[target.osx-arm64.dependencies]
+[feature.tar]
+platforms = ["linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
+
+[feature.tar.dependencies]
 tar = "*"
 
-[target.linux-64.dependencies]
-tar = "*"
-
-[target.linux-aarch64.dependencies]
-tar = "*"
-
-[target.osx-64.dependencies]
-tar = "*"
-
+[feature.tar.tasks]
+create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
+                         "src", "test", "CMakeLists.txt"], depends-on = [ "prepare" ]}
 
 [tasks]
 ## build tasks
@@ -51,9 +49,6 @@ test = { cmd = ["./test/tests/test_Catch", "&&",
 ## clean tasks
 clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"] }
 
-## create source
-create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
-                         "src", "test", "CMakeLists.txt"], depends-on = [ "prepare" ]}
 
 [dependencies]
 vtk = ">=9.3.1,<9.4"
