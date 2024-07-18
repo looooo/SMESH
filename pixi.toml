@@ -6,18 +6,32 @@ authors = ["looooo <sppedflyer@gmail.com>"]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
-[tasks]
 
+## TODO: find a better solution to add the tar dependency. tar is not available on windows
+[target.osx-arm64.dependencies]
+tar = "*"
+
+[target.linux-64.dependencies]
+tar = "*"
+
+[target.linux-aarch64.dependencies]
+tar = "*"
+
+[target.osx-64.dependencies]
+tar = "*"
+
+
+[tasks]
 ## build tasks
 initialize = "git submodule update --init"
-prepare = "python prepare.py"
+prepare = { cmd = "python prepare.py", depends-on = ["initialize"]}
 configure = { cmd = ["cmake", 
                      "-S", ".",
                      "-D", "CMAKE_BUILD_TYPE='Debug'",
                      "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$CONDA_PREFIX",
                      "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                      "-D", "ENABLE_NETGEN=ON",
-                     "-B", "build"], depends-on = ["initialize", "prepare"]}
+                     "-B", "build"], depends-on = ["prepare"]}
 build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
 
 ## test tasks
@@ -37,6 +51,9 @@ test = { cmd = ["./test/tests/test_Catch", "&&",
 ## clean tasks
 clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"] }
 
+## create source
+create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
+                         "src", "test", "CMakeLists.txt"], depends-on = [ "prepare" ]}
 
 [dependencies]
 vtk = ">=9.3.1,<9.4"
