@@ -17,7 +17,7 @@ tar = "*"
 
 [feature.tar.tasks]
 create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
-                         "src", "test", "CMakeLists.txt"], depends-on = [ "prepare" ]}
+                         "src", "test", "CMakeLists.txt", "cmake/SMESHConfig.cmake.in"], depends-on = [ "prepare" ]}
 
 [tasks]
 ## build tasks
