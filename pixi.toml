@@ -7,22 +7,45 @@ channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
 [environments]
-tar = ["tar"]
+prepare = ["prepare"]
+createsource = ["createsource"]
+build = ["build"]
 
-[feature.tar]
+# prepare sources (copy and patch)
+[feature.prepare.dependencies]
+git = "*"
+python-patch = "*"
+python = "*"
+
+[feature.prepare.tasks]
+initialize = "git submodule update --init"
+prepare = { cmd = "python prepare.py", depends-on = ["initialize"]}
+
+
+# create release source
+[feature.createsource]
 platforms = ["linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
-[feature.tar.dependencies]
+[feature.createsource.dependencies]
 tar = "*"
 
-[feature.tar.tasks]
+[feature.createsource.tasks]
 create_source = { cmd = ["tar", "czvf", "SMESH_$(git rev-parse --abbrev-ref HEAD).tar.gz",
                          "src", "test", "CMakeLists.txt", "cmake/SMESHConfig.cmake.in"], depends-on = [ "prepare" ]}
 
-[tasks]
+[feature.build.dependencies]
+vtk = ">=9.3.1,<9.4"
+occt = ">=7.8.1,<7.9"
+libzlib = ">=1.3.1,<1.4"
+libboost-devel = ">=1.85.0,<1.86"
+cmake = ">=3.30.0,<3.31"
+zlib = ">=1.3.1,<1.4"
+catch2 = "<3.0"
+
+
+[feature.build.tasks]
+
 ## build tasks
-initialize = "git submodule update --init"
-prepare = { cmd = "python prepare.py", depends-on = ["initialize"]}
 configure = { cmd = ["cmake", 
                      "-S", ".",
                      "-D", "CMAKE_BUILD_TYPE='Debug'",
@@ -48,18 +71,3 @@ test = { cmd = ["./test/tests/test_Catch", "&&",
 
 ## clean tasks
 clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"] }
-
-
-[dependencies]
-vtk = ">=9.3.1,<9.4"
-occt = ">=7.8.1,<7.9"
-libzlib = ">=1.3.1,<1.4"
-libboost-devel = ">=1.85.0,<1.86"
-cmake = ">=3.30.0,<3.31"
-git = ">=2.45.2,<2.46"
-python-patch = ">=1.16,<2"
-python = "3.12.*"
-zlib = ">=1.3.1,<1.4"
-catch2 = "<3.0"
-
-
