@@ -18,6 +18,11 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
+    - if: matrix.os == 'ubuntu-latest'
+      name: "Fix dependencies"
+      run: |
+          sudo apt-get install libmesa-dev
+
     - uses: actions/checkout@v2
       name: Checkout
       with:
