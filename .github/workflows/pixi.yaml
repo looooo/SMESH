@@ -21,7 +21,7 @@ jobs:
     - if: matrix.os == 'ubuntu-latest'
       name: "Fix dependencies"
       run: |
-          sudo apt-get install libmesa-dev
+          sudo apt-get install mesa-common-dev
 
     - uses: actions/checkout@v2
       name: Checkout
