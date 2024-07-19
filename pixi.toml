@@ -54,6 +54,8 @@ configure = { cmd = ["cmake",
                      "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$CONDA_PREFIX",
                      "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                      "-D", "ENABLE_NETGEN=ON",
+                     "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
+                     "-D", "PTHREAD_LIB_DIRS:FILEPATH=$CONDA_PREFIX/lib",
                      "-B", "build"], depends-on = ["prepare"]}
 build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
 build_only = { cmd = ["make", "-C", "build", "install"] }
