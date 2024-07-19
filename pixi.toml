@@ -57,8 +57,8 @@ configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
                      "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
                      "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
                      ], depends-on = ["prepare"]}
-build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
-build_only = { cmd = ["make", "-C", "build", "install"] }
+build = { cmd = ["ninja", "-C", "build", "install"], depends-on = ["configure"] }
+build_only = { cmd = ["ninja", "-C", "build", "install"] }
 configure_tests = { cmd = ["cmake", "-G", "Ninja", "-B", "test/build", "-S", "test/.",
                            "-D", "CMAKE_BUILD_TYPE='Debug'",
                            "-D", "CMAKE_PREFIX_PATH=$CONDA_PREFIX",
@@ -66,8 +66,8 @@ configure_tests = { cmd = ["cmake", "-G", "Ninja", "-B", "test/build", "-S", "te
                            "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
                            "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
                            ]}
-build_tests = { cmd = ["make", "-C", "test/build", "-j4", 
-                         "install"], depends-on = ["configure_tests"]}
+build_tests = { cmd = ["ninja", "-C", "test/build", "-j4", 
+                       "install"], depends-on = ["configure_tests"]}
 test = { cmd = ["./test/tests/test_Catch", "&&",
                      "./test/tests/test_MEFISTO2", "&&", 
                      "./test/tests/test_StdMeshers", "&&",
