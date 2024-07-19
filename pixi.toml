@@ -35,6 +35,7 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
                          "LICENSE.txt", "README.md"], depends-on = [ "prepare" ]}
 
 [feature.build.dependencies]
+ninja = "*"
 vtk = ">=9.3.1,<9.4"
 occt = ">=7.8.1,<7.9"
 libzlib = ">=1.3.1,<1.4"
@@ -48,23 +49,23 @@ pthreads-win32 = "*"
 
 # build and test
 [feature.build.tasks]
-configure = { cmd = ["cmake", 
-                     "-S", ".",
+configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
                      "-D", "CMAKE_BUILD_TYPE='Debug'",
-                     "-D", "CMAKE_INSTALL_PREFIX:FILEPATH=$CONDA_PREFIX",
+                     "-D", "CMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
                      "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                      "-D", "ENABLE_NETGEN=ON",
                      "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
-                     "-D", "PTHREAD_LIB_DIRS:FILEPATH=$CONDA_PREFIX/lib",
-                     "-B", "build"], depends-on = ["prepare"]}
+                     "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
+                     ], depends-on = ["prepare"]}
 build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
 build_only = { cmd = ["make", "-C", "build", "install"] }
-configure_tests = { cmd = ["cmake", 
-                           "-S", "test/.",
+configure_tests = { cmd = ["cmake", "-G", "Ninja", "-B", "test/build", "-S", "test/.",
                            "-D", "CMAKE_BUILD_TYPE='Debug'",
                            "-D", "CMAKE_PREFIX_PATH=$CONDA_PREFIX",
                            "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
-                           "-B", "test/build"]}
+                           "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
+                           "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
+                           ]}
 build_tests = { cmd = ["make", "-C", "test/build", "-j4", 
                          "install"], depends-on = ["configure_tests"]}
 test = { cmd = ["./test/tests/test_Catch", "&&",
