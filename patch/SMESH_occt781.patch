@@ -151,10 +151,10 @@ index f97e645..a5b1648 100644
    TMapOfElements               mapOfElements;
    std::vector< TGroupOfElems > arrayOfGroups;
 diff --git a/src/SMESHDS/SMESHDS_DataMapOfShape.hxx b/src/SMESHDS/SMESHDS_DataMapOfShape.hxx
-index ac47dfc..44ec8e9 100644
+index ac47dfc..2f817c3 100644
 --- a/src/SMESHDS/SMESHDS_DataMapOfShape.hxx
 +++ b/src/SMESHDS/SMESHDS_DataMapOfShape.hxx
-@@ -42,7 +42,17 @@ struct SMESHDS_Hasher
+@@ -42,7 +42,15 @@ struct SMESHDS_Hasher
    static inline Standard_Integer HashCode(const TopoDS_Shape& S,
                                            const Standard_Integer Upper)
    {
@@ -163,12 +163,10 @@ index ac47dfc..44ec8e9 100644
 +    return hash_value % Upper;
 +  }
 +
-+  Standard_Integer operator()(const TopoDS_Shape& S) const
-+  {
++  size_t operator()(const TopoDS_Shape& S) const noexcept {
 +    return std::hash<TopoDS_Shape>{}(S);
 +  }
-+  Standard_Integer operator()(const TopoDS_Shape& S1, const TopoDS_Shape& S2) const
-+  {
++  size_t operator()(const TopoDS_Shape& S1, const TopoDS_Shape& S2) const noexcept {
 +    return S1.IsSame(S2);
    }
  };
