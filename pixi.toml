@@ -54,6 +54,7 @@ configure = { cmd = ["cmake",
                      "-D", "ENABLE_NETGEN=ON",
                      "-B", "build"], depends-on = ["prepare"]}
 build = { cmd = ["make", "-C", "build", "install"], depends-on = ["configure"] }
+build_only = { cmd = ["make", "-C", "build", "install"] }
 configure_tests = { cmd = ["cmake", 
                            "-S", "test/.",
                            "-D", "CMAKE_BUILD_TYPE='Debug'",
@@ -68,4 +69,6 @@ test = { cmd = ["./test/tests/test_Catch", "&&",
                      "./test/tests/test_NETGENPlugin"], depends-on = ["build_tests"] }
 clean = { cmd = ["rm", "-r", "build", "test/build", "test/tests"] }
 gdb_mefisto = { cmd = ["gdb", "./test/tests/test_MEFISTO2"]} # linux
+gdb_std = { cmd = ["gdb", "./test/tests/test_StdMesher"]} # linux
+gdb_netgen = { cmd = ["gdb", "./test/tests/test_NETGENPlugin"]} # linux
 lldb_mefisto = { cmd = ["lldb", "./test/tests/test_MEFISTO2"]} # osx
