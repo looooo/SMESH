@@ -1,0 +1,38 @@
+diff --git a/src/Utils/Utils_ExceptHandlers.hxx b/src/Utils/Utils_ExceptHandlers.hxx
+index b00ecc3..e045f99 100644
+--- a/src/Utils/Utils_ExceptHandlers.hxx
++++ b/src/Utils/Utils_ExceptHandlers.hxx
+@@ -38,30 +38,18 @@ typedef void (*PVF)();
+ class UTILS_EXPORT Unexpect { //save / retrieve unexpected exceptions treatment
+   PVF old;
+   public :
+-#ifndef WIN32
+     Unexpect( PVF f ) 
+       { old = std::set_unexpected(f); }
+-  ~Unexpect() { std::set_unexpected(old); }
+-#else
+-    Unexpect( PVF f ) 
+-      { old = ::set_unexpected(f); }
+-  ~Unexpect() { ::set_unexpected(old); }
+-#endif
+-};
++    ~Unexpect() { std::set_unexpected(old); }
++
+ 
+ class UTILS_EXPORT Terminate {//save / retrieve terminate function
+   
+   PVF old;
+   public :
+-#ifndef WIN32
+     Terminate( PVF f ) 
+       { old = std::set_terminate(f); }
+-  ~Terminate() { std::set_terminate(old); }
+-#else
+-    Terminate( PVF f ) 
+-      { old = ::set_terminate(f); }
+-  ~Terminate() { ::set_terminate(old); }
+-#endif
++    ~Terminate() { std::set_terminate(old); }
+ };
+ 
+ #define UNEXPECT_CATCH(FuncName, ExceptionConstructor) \

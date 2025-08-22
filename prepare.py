@@ -74,6 +74,12 @@ def prepare_kernel():
     if not success:
         raise RuntimeError('Failed to apply occt7.8.1 patch for Kernel.')
 
+    # Patch sources
+    pset = patch.fromfile('patch/kernel_win_std_set_unexpected.patch')
+    success = pset.apply(strip=0, root='src/Kernel')
+    if not success:
+        raise RuntimeError('Failed to apply set_unexpected.patch for Kernel.')
+
 
 def prepare_geom():
     """
