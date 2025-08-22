@@ -45,6 +45,7 @@ catch2 = "<3.0"
 
 [target.win-64.dependencies]
 pthreads-win32 = "*"
+vs2019_win-64 = "*"
 
 # build and test
 [tasks]
