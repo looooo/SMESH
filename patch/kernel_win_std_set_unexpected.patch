@@ -1,5 +1,5 @@
 diff --git a/src/Utils/Utils_ExceptHandlers.hxx b/src/Utils/Utils_ExceptHandlers.hxx
-index b00ecc3..e045f99 100644
+index b00ecc3..30c7528 100644
 --- a/src/Utils/Utils_ExceptHandlers.hxx
 +++ b/src/Utils/Utils_ExceptHandlers.hxx
 @@ -38,30 +38,18 @@ typedef void (*PVF)();
@@ -15,9 +15,8 @@ index b00ecc3..e045f99 100644
 -      { old = ::set_unexpected(f); }
 -  ~Unexpect() { ::set_unexpected(old); }
 -#endif
--};
 +    ~Unexpect() { std::set_unexpected(old); }
-+
+ };
  
  class UTILS_EXPORT Terminate {//save / retrieve terminate function
    
