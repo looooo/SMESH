@@ -192,6 +192,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply smesh_tkexpr.patch for SMESH.')
 
+    pset = patch.fromfile('patch/smesh_win.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply smesh_win.patch for SMESH.')
+
 
 def prepare_netgen_plugin():
     """
