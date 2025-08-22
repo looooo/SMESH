@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.20)
 project(SMESH VERSION 9.8.0.2 LANGUAGES C CXX)
 
 # --------------------------------------------------------------------------- #
