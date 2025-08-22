@@ -177,6 +177,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
 
+    pset = patch.fromfile('patch/vtk_9_4.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply vtk_9_4 patch for SMESH.')
+
 
 def prepare_netgen_plugin():
     """
