@@ -1,7 +1,20 @@
 diff --git a/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx b/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
-index b058e86..9a4a4af 100644
+index b058e86..5b119e1 100644
 --- a/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
 +++ b/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
+@@ -209,9 +209,9 @@ namespace
+ 
+       libraryFile._isURL = false;
+       if ( boost::regex_match( libraryFile._name, matchResult, urlRegex ))
+-        libraryFile._isURL = ( !matchResult.str( SCHEME    ).empty() &&
+-                              !matchResult.str( AUTHORITY ).empty() &&
+-                              !matchResult.str( PATH      ).empty() );
++        libraryFile._isURL = ( !matchResult[SCHEME].str().empty() &&
++                              !matchResult[AUTHORITY].str().empty() &&
++                              !matchResult[PATH].str().empty() );
+     }
+     if(libraryFile._isURL)
+       return true;
 @@ -223,9 +223,9 @@ namespace
  
        libraryFile._isURL = false;
@@ -11,7 +24,7 @@ index b058e86..9a4a4af 100644
 -                              !matchResult.str( PATH ).empty() );
 +        libraryFile._isURL = ( !matchResult[HOST].str().empty() &&
 +                               !matchResult[PORT].str().empty() &&
-+                               !matchResult[PATH].str().empty() );    
++                               !matchResult[PATH].str().empty() );
      }
      return libraryFile._isURL;
    }
