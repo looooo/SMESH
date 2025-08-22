@@ -9,7 +9,6 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 [environments]
 prepare = ["prepare"]
 createsource = ["createsource"]
-build = ["build"]
 
 # prepare sources (copy and patch)
 [feature.prepare.dependencies]
@@ -34,7 +33,7 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
                          "src", "test", "CMakeLists.txt", "cmake/SMESHConfig.cmake.in", 
                          "LICENSE.txt", "README.md"], depends-on = [ "prepare" ]}
 
-[feature.build.dependencies]
+[dependencies]
 ninja = "*"
 vtk = ">=9.4.0,<9.5"
 occt = ">=7.9.0,<7.10"
@@ -44,11 +43,11 @@ cmake = "*"
 zlib = "*"
 catch2 = "<3.0"
 
-[feature.build.target.win-64.dependencies]
+[target.win-64.dependencies]
 pthreads-win32 = "*"
 
 # build and test
-[feature.build.tasks]
+[tasks]
 configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
                      "-D", "CMAKE_BUILD_TYPE='Debug'",
                      "-D", "CMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
