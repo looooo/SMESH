@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 65a806d..c238969 100644
+index 65a806d..bea759b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -127,7 +127,7 @@ install(FILES ${SMDS_INCLUDES} DESTINATION "include/smesh/SMDS")
@@ -11,3 +11,21 @@ index 65a806d..c238969 100644
  target_include_directories(SMESH PUBLIC
    $<BUILD_INTERFACE:${SMESH_SRC_DIR}/SMESH>
    $<INSTALL_INTERFACE:include/smesh/SMESH>
+@@ -157,7 +157,7 @@ install(FILES ${SMESHDS_INCLUDES} DESTINATION "include/smesh/SMESHDS")
+ # StdMeshers
+ file(GLOB StdMeshers_SRC ${SMESH_SRC_DIR}/StdMeshers/*.cxx)
+ add_library(StdMeshers ${StdMeshers_SRC})
+-target_link_libraries(StdMeshers SMESH MEFISTO2 TKOffset ${Boost_LIBRARIES})
++target_link_libraries(StdMeshers SMESH MEFISTO2 TKOffset TKMath ${Boost_LIBRARIES})
+ target_include_directories(StdMeshers PUBLIC
+   $<BUILD_INTERFACE:${SMESH_SRC_DIR}/StdMeshers>
+   $<INSTALL_INTERFACE:include/smesh/StdMeshers>
+@@ -172,7 +172,7 @@ install(FILES ${StdMeshers_INCLUDES} DESTINATION "include/smesh/StdMeshers")
+ # SMESHUtils
+ file(GLOB SMESHUtils_SRC ${SMESH_SRC_DIR}/SMESHUtils/*.cxx)
+ add_library(SMESHUtils ${SMESHUtils_SRC})
+-target_link_libraries(SMESHUtils SMDS TKShHealing TKPrim TKernel TKBRep TKG2d TKG3d TKGeomBase TKGeomAlgo TKTopAlgo TKMesh ${Boost_LIBRARIES})
++target_link_libraries(SMESHUtils SMDS TKShHealing TKPrim TKernel TKBRep TKG2d TKG3d TKGeomBase TKGeomAlgo TKTopAlgo TKMesh TKMath ${Boost_LIBRARIES})
+ target_include_directories(SMESHUtils PUBLIC
+   $<BUILD_INTERFACE:${SMESH_SRC_DIR}/SMESHUtils>
+   $<INSTALL_INTERFACE:include/smesh/SMESHUtils>
