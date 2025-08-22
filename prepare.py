@@ -180,7 +180,12 @@ def prepare_smesh():
     pset = patch.fromfile('patch/vtk_9_4.patch')
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
-        raise RuntimeError('Failed to apply vtk_9_4 patch for SMESH.')
+        raise RuntimeError('Failed to apply vtk_9_4 patch for SMESH.')    
+
+    pset = patch.fromfile('patch/boost_1_89.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply boost_1_89.patch for SMESH.')
 
 
 def prepare_netgen_plugin():
