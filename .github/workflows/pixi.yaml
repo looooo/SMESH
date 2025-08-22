@@ -15,7 +15,7 @@ jobs:
       max-parallel: 3
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-13]
+        os: [windows-latest, ubuntu-latest, macos-13, macos-latest]
 
     steps:
     - if: matrix.os == 'ubuntu-latest'
