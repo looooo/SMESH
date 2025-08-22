@@ -1,17 +1,15 @@
 diff --git a/src/SMESH/SMESH_MesherHelper.cxx b/src/SMESH/SMESH_MesherHelper.cxx
-index 1dcc5b0..bcf99aa 100644
+index 1dcc5b0..a9c7e7f 100644
 --- a/src/SMESH/SMESH_MesherHelper.cxx
 +++ b/src/SMESH/SMESH_MesherHelper.cxx
-@@ -4953,10 +4953,10 @@ void SMESH_MesherHelper::FixQuadraticElements(SMESH_ComputeErrorPtr& compError,
-       }
-     }
-     // fix nodes on geom faces
--#ifdef _DEBUG_
-+
-     int nbfaces = nbSolids;
+@@ -4958,8 +4958,10 @@ void SMESH_MesherHelper::FixQuadraticElements(SMESH_ComputeErrorPtr& compError,
      nbfaces = faces.Extent(); /*avoid "unused varianbles": */ nbfaces++, nbfaces--; 
--#endif
-+  
+ #endif
      for ( TopTools_MapIteratorOfMapOfShape fIt( faces ); fIt.More(); fIt.Next() ) {
++#ifdef _DEBUG_
        MESSAGE("FIX FACE " << nbfaces-- << " #" << GetMeshDS()->ShapeToIndex(fIt.Key()));
        MSG("FIX FACE " << nbfaces-- << " #" << GetMeshDS()->ShapeToIndex(fIt.Key()));
++#endif
+       SMESH_MesherHelper h(*myMesh);
+       h.SetSubShape( fIt.Key() );
+       h.ToFixNodeParameters(true);
