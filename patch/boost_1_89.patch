@@ -1,5 +1,5 @@
 diff --git a/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx b/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
-index b058e86..5b119e1 100644
+index b058e86..807f3a8 100644
 --- a/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
 +++ b/src/SMESHUtils/SMESH_MGLicenseKeyGen.cxx
 @@ -209,9 +209,9 @@ namespace
@@ -9,9 +9,9 @@ index b058e86..5b119e1 100644
 -        libraryFile._isURL = ( !matchResult.str( SCHEME    ).empty() &&
 -                              !matchResult.str( AUTHORITY ).empty() &&
 -                              !matchResult.str( PATH      ).empty() );
-+        libraryFile._isURL = ( !matchResult[SCHEME].str().empty() &&
-+                              !matchResult[AUTHORITY].str().empty() &&
-+                              !matchResult[PATH].str().empty() );
++        libraryFile._isURL = ( !matchResult[static_cast<int>(SCHEME)].str().empty() &&
++                               !matchResult[static_cast<int>(AUTHORITY)].str().empty() &&
++                               !matchResult[static_cast<int>(PATH)].str().empty() );
      }
      if(libraryFile._isURL)
        return true;
@@ -22,9 +22,9 @@ index b058e86..5b119e1 100644
 -        libraryFile._isURL = ( !matchResult.str( HOST ).empty() &&
 -                              !matchResult.str( PORT ).empty() &&
 -                              !matchResult.str( PATH ).empty() );
-+        libraryFile._isURL = ( !matchResult[HOST].str().empty() &&
-+                               !matchResult[PORT].str().empty() &&
-+                               !matchResult[PATH].str().empty() );
++        libraryFile._isURL = ( !matchResult[static_cast<int>(HOST)].str().empty() &&
++                               !matchResult[static_cast<int>(PORT)].str().empty() &&
++                               !matchResult[static_cast<int>(PATH)].str().empty() );
      }
      return libraryFile._isURL;
    }
