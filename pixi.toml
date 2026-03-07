@@ -44,6 +44,9 @@ cmake = "*"
 zlib = "*"
 catch2 = "<3.0"
 
+[feature.build.target.win-64.dependencies]
+cxx-compiler = "*"
+
 # build and test
 [feature.build.tasks]
 configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
