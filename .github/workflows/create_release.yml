@@ -24,6 +24,9 @@ jobs:
       id: set_tag
       run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
     - uses: prefix-dev/setup-pixi@v0.9.4
+      with:
+        environments: createsource
+        cache: true
 
     - run: pixi run create_source
 
