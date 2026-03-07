@@ -37,7 +37,7 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
 [feature.build.dependencies]
 ninja = "*"
 vtk = "*"
-occt = "*"
+occt = "7.9.3"
 libzlib = "*"
 libboost-devel = "*"
 cmake = "*"
