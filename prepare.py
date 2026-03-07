@@ -84,6 +84,11 @@ def prepare_kernel():
     if not success:
         raise RuntimeError('Failed to apply MSVC pthread compat patch for Kernel.')
 
+    pset = patch.fromfile('patch/Kernel_msvc_set_unexpected.patch')
+    success = pset.apply(strip=0, root='src/Kernel')
+    if not success:
+        raise RuntimeError('Failed to apply MSVC set_unexpected patch for Kernel.')
+
 
 def prepare_geom():
     """

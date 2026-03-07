@@ -28,7 +28,7 @@ target_include_directories(Kernel PUBLIC
 )
 
 if(MSVC)
-    target_include_directories(Kernel PRIVATE
+    target_include_directories(Kernel PUBLIC
         ${CMAKE_SOURCE_DIR}/extra/pthread)
 endif()
 
