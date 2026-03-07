@@ -202,6 +202,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply VTK 9.6 patch for SMESH_MeshEditor.')
 
+    pset = patch.fromfile('patch/SMESH_File_mingw.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply MinGW patch for SMESH_File.')
+
 
 def prepare_netgen_plugin():
     """
