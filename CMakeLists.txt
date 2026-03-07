@@ -46,6 +46,7 @@ else(UNIX)
   if(WIN32)
     # Define NOMINMAX to avoid conflice with Windows.h max and min
     add_definitions(-DNOMINMAX)
+      add_definitions(-D_USE_MATH_DEFINES)
       if(MSVC)
           add_definitions(-DWNT -DWIN32 -D_WINDOWS -DCSFDB -DUSE_CLOCK -DMSDOS -DNO_ONEXIT -DNO_My_ctype -DNO_ISATTY -DNO_FPINIT)
       else(MSVC)

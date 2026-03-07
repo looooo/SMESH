@@ -1,175 +1,168 @@
-diff --git a/src/SMDS/SMDS_MeshVolume.cxx b/src/SMDS/SMDS_MeshVolume.cxx
 --- a/src/SMDS/SMDS_MeshVolume.cxx
 +++ b/src/SMDS/SMDS_MeshVolume.cxx
-@@ -32,6 +32,9 @@
- #include "SMDS_VolumeTool.hxx"
- #include "SMDS_VtkCellIterator.hxx"
+@@ -28,6 +28,10 @@
+ 
+ #include "SMDS_MeshVolume.hxx"
  
 +#include <vtkIdList.h>
 +#include <vtkNew.h>
++#include <vtkVersionMacros.h>
 +
- #include <boost/make_shared.hpp>
- 
- // init a polyherdon
-@@ -81,12 +84,10 @@
+ #include "SMDS_Mesh.hxx"
+ #include "SMDS_VolumeTool.hxx"
+ #include "SMDS_VtkCellIterator.hxx"
+@@ -81,10 +85,17 @@
    if ( !IsPoly() )
      return false;
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *tmp(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, tmp );
--  vtkIdType *ptIds = const_cast<vtkIdType*>( tmp );
--
--  // stream size and nb faces should not change
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *tmp(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, tmp );
+   vtkIdType *ptIds = const_cast<vtkIdType*>( tmp );
++#endif
  
-   if ((vtkIdType) quantities.size() != nFaces )
-   {
-@@ -104,14 +105,15 @@
-     return false;
-   }
+   // stream size and nb faces should not change
  
--  // update ptIds
-+  // update ptIds in the local copy
-   size_t iP = 0, iN = 0;
-   for ( size_t i = 0; i < quantities.size(); ++i )
-   {
--    ptIds[ iP++ ] = quantities[ i ]; // nb face nodes
-+    ptIds[ iP++ ] = quantities[ i ];
-     for ( int j = 0; j < quantities[ i ]; ++j )
-       ptIds[ iP++ ] = nodes[ iN++ ]->GetVtkID();
-   }
-+
-   return true;
- }
- 
-@@ -120,9 +122,10 @@
+@@ -120,9 +131,16 @@
    if ( !IsPoly() )
      return SMDS_MeshCell::GetNode( ind );
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0, nbPoints = 0;
    for (int i = 0; i < nFaces; i++)
    {
-@@ -139,9 +142,10 @@
+@@ -139,9 +157,16 @@
    if ( !IsPoly() )
      return SMDS_MeshCell::NbNodes();
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0, nbPoints = 0;
    for (int i = 0; i < nFaces; i++)
    {
-@@ -157,9 +161,9 @@
+@@ -157,9 +182,16 @@
    if ( !IsPoly() )
      return SMDS_MeshCell::NbFaces();
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    return nFaces;
    
  }
-@@ -168,9 +172,10 @@
+@@ -168,9 +200,16 @@
    if ( !IsPoly() )
      return SMDS_MeshCell::NbEdges();
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0, nbEdges = 0;
    for (int i = 0; i < nFaces; i++)
    {
-@@ -187,9 +192,10 @@
+@@ -187,9 +226,16 @@
    if ( !IsPoly() )
      return SMDS_MeshCell::GetNodeIndex( node );
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0;
    for (int iF = 0; iF < nFaces; iF++)
    {
-@@ -227,9 +233,10 @@
+@@ -227,9 +273,16 @@
    if ( !IsPoly() )
      return SMDS_VolumeTool( this ).NbFaceNodes( face_ind-1 );
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
--  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
+   getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0, nbNodes = 0;
    for (int i = 0; i < nFaces; i++)
    {
-@@ -249,17 +256,18 @@
+@@ -249,9 +302,16 @@
    if ( !IsPoly() )
      return SMDS_VolumeTool( this ).GetFaceNodes( face_ind-1 )[ node_ind - 1 ];
  
--  vtkIdType nFaces = 0;
--  vtkIdType const *ptIds(nullptr);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++  vtkNew<vtkIdList> faceStreamList;
++  getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++  vtkIdType nFaces = faceStreamList->GetId(0);
++  vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+   vtkIdType nFaces = 0;
+   vtkIdType const *ptIds(nullptr);
 -  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds);
-+  vtkNew<vtkIdList> faceStream;
-+  getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+  vtkIdType nFaces = faceStream->GetId(0);
-+  vtkIdType const *ptIds = faceStream->GetPointer(1);
++  getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
    int id = 0;
    for (int i = 0; i < nFaces; i++)
    {
--    int nodesInFace = ptIds[id]; // nodeIds in ptIds[id+1 .. id+nodesInFace]
--    if (i == face_ind - 1) // first face is number 1
-+    int nodesInFace = ptIds[id];
-+    if (i == face_ind - 1)
-     {
-       if ((node_ind > 0) && (node_ind <= nodesInFace))
--        return GetMesh()->FindNodeVtk(ptIds[id + node_ind]); // ptIds[id+1] : first node
-+        return GetMesh()->FindNodeVtk(ptIds[id + node_ind]);
-     }
-     id += (nodesInFace + 1);
-   }
-@@ -271,13 +279,14 @@
+@@ -271,9 +331,16 @@
    std::vector<int> quantities;
    if ( IsPoly() )
    {
--    vtkIdType nFaces = 0;
--    vtkIdType const *ptIds(nullptr);
--    getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
-+    vtkNew<vtkIdList> faceStream;
-+    getGrid()->GetFaceStream( GetVtkID(), faceStream );
-+    vtkIdType nFaces = faceStream->GetId(0);
-+    vtkIdType const *ptIds = faceStream->GetPointer(1);
++#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9,6,0)
++    vtkNew<vtkIdList> faceStreamList;
++    getGrid()->GetFaceStream(GetVtkID(), faceStreamList);
++    vtkIdType nFaces = faceStreamList->GetId(0);
++    vtkIdType const *ptIds = faceStreamList->GetPointer(1);
++#else
+     vtkIdType nFaces = 0;
+     vtkIdType const *ptIds(nullptr);
+     getGrid()->GetFaceStream( GetVtkID(), nFaces, ptIds );
++#endif
      int id = 0;
      for (int i = 0; i < nFaces; i++)
      {
--      int nodesInFace = ptIds[id]; // nodeIds in ptIds[id+1 .. id+nodesInFace]
-+      int nodesInFace = ptIds[id];
-       quantities.push_back( nodesInFace );
-       id += (nodesInFace + 1);
-     }
