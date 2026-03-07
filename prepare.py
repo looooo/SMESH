@@ -217,6 +217,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply MinGW patch for SMESH_File.')
 
+    pset = patch.fromfile('patch/SMESH_MesherHelper_msvc.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply MSVC debug fix for SMESH_MesherHelper.')
+
 
 def prepare_netgen_plugin():
     """
