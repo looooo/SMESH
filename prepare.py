@@ -74,6 +74,11 @@ def prepare_kernel():
     if not success:
         raise RuntimeError('Failed to apply occt7.8.1 patch for Kernel.')
 
+    pset = patch.fromfile('patch/Kernel_mingw_gcc15.patch')
+    success = pset.apply(strip=0, root='src/Kernel')
+    if not success:
+        raise RuntimeError('Failed to apply MinGW GCC 15 patch for Kernel.')
+
 
 def prepare_geom():
     """
