@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name = "SMESH"
 version = "0.1.0"
 description = "Add a short description here"
@@ -36,8 +36,8 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
 
 [feature.build.dependencies]
 ninja = "*"
-vtk = ">=9.4.0,<9.5"
-occt = ">=7.9.0,<7.10"
+vtk = "*"
+occt = "*"
 libzlib = "*"
 libboost-devel = "*"
 cmake = "*"

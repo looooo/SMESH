@@ -177,6 +177,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply occt7.8.1 patch for SMESH.')
 
+    pset = patch.fromfile('patch/SMDS_UnstructuredGrid_vtk94.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply VTK 9.4 patch for SMDS_UnstructuredGrid.')
+
 
 def prepare_netgen_plugin():
     """
