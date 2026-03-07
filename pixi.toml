@@ -44,9 +44,6 @@ cmake = "*"
 zlib = "*"
 catch2 = "<3.0"
 
-[feature.build.target.win-64.dependencies]
-winpthreads = "*"
-
 # build and test
 [feature.build.tasks]
 configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
@@ -54,8 +51,6 @@ configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
                      "-D", "CMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
                      "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
                      "-D", "ENABLE_NETGEN=ON",
-                     "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
-                     "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
                      ], depends-on = ["prepare"]}
 build = { cmd = ["ninja", "-C", "build", "install"], depends-on = ["configure"] }
 build_only = { cmd = ["ninja", "-C", "build", "install"] }
@@ -63,8 +58,6 @@ configure_tests = { cmd = ["cmake", "-G", "Ninja", "-B", "test/build", "-S", "te
                            "-D", "CMAKE_BUILD_TYPE='Debug'",
                            "-D", "CMAKE_PREFIX_PATH=$CONDA_PREFIX",
                            "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
-                           "-D", "PTHREAD_INCLUDE_DIRS=$CONDA_PREFIX/include",
-                           "-D", "PTHREAD_LIB_DIRS=$CONDA_PREFIX/lib",
                            ]}
 build_tests = { cmd = ["ninja", "-C", "test/build", "-j4", 
                        "install"], depends-on = ["configure_tests"]}

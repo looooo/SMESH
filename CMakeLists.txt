@@ -99,21 +99,7 @@ endif()
 # --------------------------------------------------------------------------- #
 # PTHREAD
 # --------------------------------------------------------------------------- #
-if(UNIX)
-  find_package(Threads REQUIRED)
-else(UNIX)
-  set(PTHREAD_INCLUDE_DIRS "" CACHE PATH "pthread include directory.")
-  if(NOT EXISTS ${PTHREAD_INCLUDE_DIRS})
-    message(FATAL_ERROR "pthread include directory is required.")
-  endif()
-  include_directories(${PTHREAD_INCLUDE_DIRS})
-
-  set(PTHREAD_LIB_DIRS "" CACHE PATH "pthread library directory.")
-  if(NOT EXISTS ${PTHREAD_LIB_DIRS})
-    message(FATAL_ERROR "pthread library directory is required.")
-  endif()
-  link_directories(${PTHREAD_LIB_DIRS})
-endif(UNIX)
+find_package(Threads REQUIRED)
 
 
 # --------------------------------------------------------------------------- #
