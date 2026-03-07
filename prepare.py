@@ -180,7 +180,22 @@ def prepare_smesh():
     pset = patch.fromfile('patch/SMDS_UnstructuredGrid_vtk94.patch')
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
-        raise RuntimeError('Failed to apply VTK 9.4 patch for SMDS_UnstructuredGrid.')
+        raise RuntimeError('Failed to apply VTK 9.4+ patch for SMDS_UnstructuredGrid.')
+
+    pset = patch.fromfile('patch/SMDS_MeshVolume_vtk96.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply VTK 9.6 patch for SMDS_MeshVolume.')
+
+    pset = patch.fromfile('patch/SMDS_VtkCellIterator_vtk96.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply VTK 9.6 patch for SMDS_VtkCellIterator.')
+
+    pset = patch.fromfile('patch/SMESH_MeshEditor_vtk96.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply VTK 9.6 patch for SMESH_MeshEditor.')
 
 
 def prepare_netgen_plugin():

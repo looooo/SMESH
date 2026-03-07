@@ -1,0 +1,20 @@
+--- a/src/SMESH/SMESH_MeshEditor.cxx
++++ b/src/SMESH/SMESH_MeshEditor.cxx
+@@ -11260,7 +11260,7 @@
+       {
+         int oldId = *itn;
+         //MESSAGE("     node " << oldId);
+-        vtkCellLinks::Link l = (static_cast <vtkCellLinks *>(grid->GetCellLinks()))->GetLink(oldId);
++        vtkCellLinks::Link l = (static_cast <vtkCellLinks *>(grid->GetLinks()))->GetLink(oldId);
+         for (int i=0; i<l.ncells; i++)
+         {
+           int vtkId = l.cells[i];
+@@ -11618,7 +11618,7 @@
+     {
+       int oldId = itnod->first;
+       //MESSAGE("     node " << oldId);
+-      vtkCellLinks::Link l = (static_cast< vtkCellLinks *>(grid->GetCellLinks()))->GetLink(oldId);
++      vtkCellLinks::Link l = (static_cast< vtkCellLinks *>(grid->GetLinks()))->GetLink(oldId);
+       for (int i = 0; i < l.ncells; i++)
+       {
+         int vtkId = l.cells[i];

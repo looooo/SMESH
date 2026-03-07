@@ -1,0 +1,25 @@
+diff --git a/src/SMDS/SMDS_VtkCellIterator.cxx b/src/SMDS/SMDS_VtkCellIterator.cxx
+--- a/src/SMDS/SMDS_VtkCellIterator.cxx
++++ b/src/SMDS/SMDS_VtkCellIterator.cxx
+@@ -22,6 +22,7 @@
+ 
+ #include <vtkCell.h>
+ #include <vtkIdList.h>
++#include <vtkNew.h>
+ 
+ _GetVtkNodes::_GetVtkNodes( TVtkIdList&        vtkIds,
+                             SMDS_Mesh*         mesh,
+@@ -141,9 +142,10 @@
+   {
+   case SMDSEntity_Polyhedra:
+   {
+-    vtkIdType nFaces = 0;
+-    vtkIdType const *ptIds(nullptr);
+-    grid->GetFaceStream( vtkCellId, nFaces, ptIds );
++    vtkNew<vtkIdList> faceStream;
++    grid->GetFaceStream( vtkCellId, faceStream );
++    vtkIdType nFaces = faceStream->GetId(0);
++    vtkIdType const *ptIds = faceStream->GetPointer(1);
+     int id = 0, nbNodesInFaces = 0;
+     for ( int i = 0; i < nFaces; i++ )
+     {

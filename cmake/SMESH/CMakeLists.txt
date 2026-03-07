@@ -157,7 +157,7 @@ install(FILES ${SMESHDS_INCLUDES} DESTINATION "include/smesh/SMESHDS")
 # StdMeshers
 file(GLOB StdMeshers_SRC ${SMESH_SRC_DIR}/StdMeshers/*.cxx)
 add_library(StdMeshers ${StdMeshers_SRC})
-target_link_libraries(StdMeshers SMESH MEFISTO2 TKOffset ${Boost_LIBRARIES})
+target_link_libraries(StdMeshers SMESH MEFISTO2 TKOffset TKExpress ${Boost_LIBRARIES})
 target_include_directories(StdMeshers PUBLIC
   $<BUILD_INTERFACE:${SMESH_SRC_DIR}/StdMeshers>
   $<INSTALL_INTERFACE:include/smesh/StdMeshers>

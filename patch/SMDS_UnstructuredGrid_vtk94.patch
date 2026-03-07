@@ -1,22 +1,36 @@
 diff --git a/src/SMDS/SMDS_UnstructuredGrid.cxx b/src/SMDS/SMDS_UnstructuredGrid.cxx
 --- a/src/SMDS/SMDS_UnstructuredGrid.cxx
 +++ b/src/SMDS/SMDS_UnstructuredGrid.cxx
-@@ -286,28 +286,33 @@
+@@ -30,7 +30,9 @@
+ #include <vtkCellData.h>
+ #include <vtkCellLinks.h>
+ #include <vtkDoubleArray.h>
++#include <vtkIdList.h>
+ #include <vtkIdTypeArray.h>
++#include <vtkNew.h>
+ #include <vtkUnsignedCharArray.h>
+ 
+ #include <list>
+@@ -248,7 +250,7 @@
+   vtkIdType newConnectivitySize = this->Connectivity->GetNumberOfConnectivityEntries();
+   if ( newCellSize != oldCellSize )
+     for ( vtkIdType i = 0; i < oldCellSize - 1; ++i )
+-      if ( this->Types->GetValue( i ) == VTK_EMPTY_CELL )
++      if ( static_cast<unsigned char>(this->Types->GetTuple1( i )) == VTK_EMPTY_CELL )
+         newConnectivitySize -= this->Connectivity->GetCellSize( i );
+ 
+   vtkCellArray *newConnectivity = vtkCellArray::New();
+@@ -286,28 +288,29 @@
  
    if (this->FaceLocations)
    {
-+#pragma GCC diagnostic push
-+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+    vtkIdTypeArray* oldFaceLocations = this->GetFaceLocations();
-+    vtkIdTypeArray* oldFaces = this->GetFaces();
-+#pragma GCC diagnostic pop
++    vtkNew<vtkIdList> faceStream;
      vtkIdTypeArray *newFaceLocations = vtkIdTypeArray::New();
      newFaceLocations->Initialize();
      newFaceLocations->Allocate(newTypes->GetSize());
      vtkIdTypeArray *newFaces = vtkIdTypeArray::New();
      newFaces->Initialize();
 -    newFaces->Allocate(this->Faces->GetSize());
-+    newFaces->Allocate(oldFaces ? oldFaces->GetSize() : 0);
      for ( vtkIdType newCellID = 0; newCellID < newCellSize; newCellID++ )
      {
        if ( newTypes->GetValue( newCellID ) == VTK_POLYHEDRON )
@@ -25,27 +39,48 @@ diff --git a/src/SMDS/SMDS_UnstructuredGrid.cxx b/src/SMDS/SMDS_UnstructuredGrid
          newFaceLocations->InsertNextValue( newFaces->GetMaxId()+1 );
 -        smIdType oldFaceLoc = this->FaceLocations->GetValue( FromSmIdType<vtkIdType>(oldCellId) );
 -        smIdType nCellFaces = this->Faces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
-+        smIdType oldFaceLoc = oldFaceLocations->GetValue( FromSmIdType<vtkIdType>(oldCellId) );
-+        smIdType nCellFaces = oldFaces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
-         newFaces->InsertNextValue( FromSmIdType<vtkIdType>(nCellFaces) );
-         for ( int n = 0; n < nCellFaces; n++ )
+-        newFaces->InsertNextValue( FromSmIdType<vtkIdType>(nCellFaces) );
+-        for ( int n = 0; n < nCellFaces; n++ )
++        this->GetFaceStream( FromSmIdType<vtkIdType>(oldCellId), faceStream );
++        vtkIdType nCellFaces = faceStream->GetId(0);
++        newFaces->InsertNextValue( nCellFaces );
++        vtkIdType idx = 1;
++        for ( vtkIdType n = 0; n < nCellFaces; n++ )
          {
 -          int nptsInFace = this->Faces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
-+          int nptsInFace = oldFaces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
++          vtkIdType nptsInFace = faceStream->GetId(idx++);
            newFaces->InsertNextValue( nptsInFace );
-           for ( int k = 0; k < nptsInFace; k++ )
+-          for ( int k = 0; k < nptsInFace; k++ )
++          for ( vtkIdType k = 0; k < nptsInFace; k++ )
            {
 -            vtkIdType oldpt = this->Faces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
-+            vtkIdType oldpt = oldFaces->GetValue( FromSmIdType<vtkIdType>(oldFaceLoc++) );
++            vtkIdType oldpt = faceStream->GetId(idx++);
              newFaces->InsertNextValue( idNodesOldToNew[ oldpt ]);
            }
          }
-@@ -326,7 +331,7 @@
+@@ -319,14 +322,14 @@
+     }
+     newFaceLocations->Squeeze();
+     newFaces->Squeeze();
+-    this->SetCells( newTypes, newLocations, newConnectivity, newFaceLocations, newFaces );
++    this->SetCells( newTypes, newConnectivity, newFaceLocations, newFaces );
+     this->CellLocations = newLocations;
+     newFaceLocations->Delete();
+     newFaces->Delete();
    }
    else
    {
 -    this->SetCells( newTypes, newLocations, newConnectivity, FaceLocations, Faces );
-+    this->SetCells( newTypes, newLocations, newConnectivity );
++    this->SetCells( static_cast<vtkDataArray*>(newTypes), newConnectivity );
      this->CellLocations = newLocations;
    }
  
+@@ -361,7 +364,7 @@
+   for ( size_t iNew = 0; iNew < idCellsNewToOld.size(); iNew++ )
+   {
+     vtkIdType iOld = idCellsNewToOld[ iNew ];
+-    newTypes->SetValue( iNew, this->Types->GetValue( iOld ));
++    newTypes->SetValue( iNew, static_cast<unsigned char>(this->Types->GetTuple1( iOld )));
+ 
+     vtkIdType oldLoc = ((vtkIdTypeArray *)(this->Connectivity->GetOffsetsArray()))->GetValue( iOld );
+     vtkIdType nbpts;
