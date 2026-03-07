@@ -222,6 +222,11 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply MSVC debug fix for SMESH_MesherHelper.')
 
+    pset = patch.fromfile('patch/StdMeshers_Quadrangle_2D_msvc.patch')
+    success = pset.apply(strip=0, root='src/SMESH')
+    if not success:
+        raise RuntimeError('Failed to apply MSVC near macro fix for StdMeshers_Quadrangle_2D.')
+
 
 def prepare_netgen_plugin():
     """
