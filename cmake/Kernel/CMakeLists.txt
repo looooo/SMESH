@@ -18,7 +18,7 @@ add_library(Kernel ${Kernel_SRCS})
 if(UNIX)
     target_link_libraries(Kernel Threads::Threads)
 else()
-    target_link_libraries(Kernel pthreads ws2_32 dbghelp)
+    target_link_libraries(Kernel pthread ws2_32 dbghelp)
 endif()
 
 target_include_directories(Kernel PUBLIC
