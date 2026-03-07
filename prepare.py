@@ -79,6 +79,11 @@ def prepare_kernel():
     if not success:
         raise RuntimeError('Failed to apply MinGW GCC 15 patch for Kernel.')
 
+    pset = patch.fromfile('patch/Kernel_msvc_pthread.patch')
+    success = pset.apply(strip=0, root='src/Kernel')
+    if not success:
+        raise RuntimeError('Failed to apply MSVC pthread compat patch for Kernel.')
+
 
 def prepare_geom():
     """
