@@ -124,7 +124,10 @@ set(test_Execs ${test_Execs} test_StdMeshers)
 add_executable(test_MEFISTO2 src/MEFISTO2.t.cpp)
 target_link_libraries(test_MEFISTO2 Catch2::Catch2 ${SMESH_LIBRARIES})
 catch_discover_tests(test_MEFISTO2)
-
+if(MSVC)
+  # MEFISTO2 uses deep recursion; Windows default stack (1MB) may overflow
+  set_target_properties(test_MEFISTO2 PROPERTIES LINK_OPTIONS "/STACK:8388608")
+endif()
 set(test_Execs ${test_Execs} test_MEFISTO2)
 
 
