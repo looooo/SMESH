@@ -33,6 +33,17 @@ jobs:
         environments: build
         cache: true
 
+    - name: Cache build
+      uses: actions/cache@v4
+      id: build-cache
+      with:
+        path: |
+          build
+          test/build
+        key: build-${{ runner.os }}-${{ hashFiles('pixi.lock', 'pixi.toml', 'prepare.py', 'patch/**', 'CMakeLists.txt', 'cmake/**', 'test/CMakeLists.txt', 'test/src/**', 'extra/**', 'external/SMESH/**', 'external/Kernel/**', 'external/Geom/**', 'external/Netgen/**', 'external/NETGENPlugin/**') }}
+        restore-keys: |
+          build-${{ runner.os }}-
+
     - run: pixi run build
     - run: pixi run test
     - if: failure() && matrix.os == 'windows-latest'
