@@ -4,6 +4,21 @@ import shutil
 import patch
 
 
+def _apply_smds_mesh_vtk_alloc(filepath):
+    """VTK 9: pre-allocate vtkPoints to avoid InsertPoint crash on Windows."""
+    with open(filepath, 'r') as f:
+        content = f.read()
+    old = '  points->SetNumberOfPoints( 0 );\n  myGrid->SetPoints( points );'
+    new = '  points->SetNumberOfPoints( 0 );\n  points->Allocate( chunkSize );\n  myGrid->SetPoints( points );'
+    if old not in content:
+        raise RuntimeError(f'Cannot apply vtkPoints Allocate: pattern not found in {filepath}')
+    if new in content:
+        return  # already applied
+    content = content.replace(old, new)
+    with open(filepath, 'w') as f:
+        f.write(content)
+
+
 def prepare_netgen():
     """
     Prepare sources for Netgen.
@@ -196,6 +211,9 @@ def prepare_smesh():
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
         raise RuntimeError('Failed to apply VTK 9.4+ patch for SMDS_UnstructuredGrid.')
+
+    # VTK 9: pre-allocate vtkPoints to avoid InsertPoint crash on Windows
+    _apply_smds_mesh_vtk_alloc('src/SMESH/src/SMDS/SMDS_Mesh.cxx')
 
     pset = patch.fromfile('patch/SMDS_MeshVolume_vtk96.patch')
     success = pset.apply(strip=0, root='src/SMESH')
