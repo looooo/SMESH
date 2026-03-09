@@ -10,6 +10,7 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 prepare = ["prepare"]
 createsource = ["createsource"]
 build = ["build"]
+build-debug = ["prepare", "build-debug"]
 
 # prepare sources (copy and patch)
 [feature.prepare.dependencies]
@@ -73,3 +74,35 @@ gdb_mefisto = { cmd = ["gdb", "./test/tests/test_MEFISTO2"]} # linux
 gdb_std = { cmd = ["gdb", "./test/tests/test_StdMesher"]} # linux
 gdb_netgen = { cmd = ["gdb", "./test/tests/test_NETGENPlugin"]} # linux
 lldb_mefisto = { cmd = ["lldb", "./test/tests/test_MEFISTO2"]} # osx
+
+# Debug build: CMAKE_BUILD_TYPE=Debug for better crash traces (line numbers, symbols)
+[feature.build-debug.dependencies]
+ninja = "*"
+vtk = "==9.6.0"
+occt = "==7.9.3"
+libzlib = "*"
+libboost-devel = "*"
+cmake = "*"
+zlib = "*"
+catch2 = "<3.0"
+
+[feature.build_debug.target.win-64.dependencies]
+cxx-compiler = "*"
+[feature.build-debug.tasks]
+configure = { cmd = ["cmake", "-G", "Ninja", "-B", "build", "-S", ".",
+                   "-D", "CMAKE_BUILD_TYPE=Debug",
+                   "-D", "CMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
+                   "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
+                   "-D", "ENABLE_NETGEN=ON",
+                   ], depends-on = ["prepare"]}
+build = { cmd = ["ninja", "-C", "build", "install"], depends-on = ["configure"] }
+configure_tests = { cmd = ["cmake", "-G", "Ninja", "-B", "test/build", "-S", "test/.",
+                         "-D", "CMAKE_BUILD_TYPE=Debug",
+                         "-D", "CMAKE_PREFIX_PATH=$CONDA_PREFIX",
+                         "-D", "CMAKE_INSTALL_RPATH=$CONDA_PREFIX/lib",
+                         ]}
+build_tests = { cmd = ["ninja", "-C", "test/build", "-j4", "install"], depends-on = ["configure_tests"]}
+test = { cmd = ["./test/tests/test_Catch", "&&",
+               "./test/tests/test_MEFISTO2", "&&",
+               "./test/tests/test_StdMeshers", "&&",
+               "./test/tests/test_NETGENPlugin"], depends-on = ["build_tests"]}
