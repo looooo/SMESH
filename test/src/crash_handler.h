@@ -27,7 +27,7 @@ void write_stderr(const char* msg) {
 
 LONG WINAPI crash_filter(EXCEPTION_POINTERS* p) {
     write_stderr("\n[CRASH] Unhandled exception 0x");
-    char buf[512];
+    char buf[256];
     sprintf(buf, "%08lX", (unsigned long)p->ExceptionRecord->ExceptionCode);
     write_stderr(buf);
     write_stderr(" at ");
@@ -78,25 +78,9 @@ LONG WINAPI crash_filter(EXCEPTION_POINTERS* p) {
         sym->MaxNameLen = 255;
 
         if (SymFromAddr(proc, addr, NULL, sym)) {
-            IMAGEHLP_LINE64 line = {};
-            line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-            DWORD disp = 0;
-            if (SymGetLineFromAddr64(proc, addr, &disp, &line)) {
-                snprintf(buf, sizeof(buf), "  #%d %p %s (%s:%lu)\n", i, (void*)(uintptr_t)addr,
-                         sym->Name, line.FileName, (unsigned long)line.LineNumber);
-            } else {
-                snprintf(buf, sizeof(buf), "  #%d %p %s\n", i, (void*)(uintptr_t)addr, sym->Name);
-            }
+            sprintf(buf, "  #%d %p %s\n", i, (void*)(uintptr_t)addr, sym->Name);
         } else {
-            IMAGEHLP_LINE64 line = {};
-            line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-            DWORD disp = 0;
-            if (SymGetLineFromAddr64(proc, addr, &disp, &line)) {
-                snprintf(buf, sizeof(buf), "  #%d %p (%s:%lu)\n", i, (void*)(uintptr_t)addr,
-                         line.FileName, (unsigned long)line.LineNumber);
-            } else {
-                snprintf(buf, sizeof(buf), "  #%d %p\n", i, (void*)(uintptr_t)addr);
-            }
+            sprintf(buf, "  #%d %p\n", i, (void*)(uintptr_t)addr);
         }
         write_stderr(buf);
     }
