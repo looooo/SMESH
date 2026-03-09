@@ -5,13 +5,14 @@ import patch
 
 
 def _apply_smds_mesh_vtk_alloc(filepath):
-    """VTK 9: pre-allocate vtkPoints to avoid InsertPoint crash on Windows."""
+    """VTK 9: pre-allocate vtkPoints to avoid InsertPoint crash on Windows.
+    SetNumberOfPoints allocates the array; Allocate alone only reserves capacity."""
     with open(filepath, 'r') as f:
         content = f.read()
     old = '  points->SetNumberOfPoints( 0 );\n  myGrid->SetPoints( points );'
-    new = '  points->SetNumberOfPoints( 0 );\n  points->Allocate( chunkSize );\n  myGrid->SetPoints( points );'
+    new = '  points->SetNumberOfPoints( chunkSize );\n  myGrid->SetPoints( points );'
     if old not in content:
-        raise RuntimeError(f'Cannot apply vtkPoints Allocate: pattern not found in {filepath}')
+        raise RuntimeError(f'Cannot apply vtkPoints alloc: pattern not found in {filepath}')
     if new in content:
         return  # already applied
     content = content.replace(old, new)
