@@ -35,6 +35,7 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
                          "LICENSE.txt", "README.md"], depends-on = [ "prepare" ]}
 
 [feature.build.dependencies]
+compilers = "*"
 ninja = "*"
 vtk = "*"
 occt = "==7.9.3"
