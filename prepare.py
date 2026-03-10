@@ -163,6 +163,15 @@ def prepare_smesh():
     if not success:
         raise RuntimeError('Failed to apply SMESH_MeshAlgos patch.')
 
+    result = subprocess.run(
+        ['patch', '-p1', '-i', os.path.join(os.getcwd(), 'patch', 'SMESH_MesherHelper_nbfaces.patch')],
+        cwd=os.path.join(os.getcwd(), 'src', 'SMESH'),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f'Failed to apply SMESH_MesherHelper nbfaces patch: {result.stderr}')
+
     pset = patch.fromfile('patch/SMESH_Slot.patch')
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
