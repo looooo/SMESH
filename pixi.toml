@@ -35,7 +35,6 @@ create_source = { cmd = ["tar", "czvf", "SMESH_$(git branch --show-current).tar.
                          "LICENSE.txt", "README.md"], depends-on = [ "prepare" ]}
 
 [feature.build.dependencies]
-compilers = "*"
 ninja = "*"
 vtk = "*"
 occt = "==7.9.3"
@@ -45,7 +44,26 @@ cmake = "*"
 zlib = "*"
 catch2 = "<3.0"
 
+# Linux: GCC (gcc/g++)
+[feature.build.target.linux-64.dependencies]
+gcc_linux-64 = "*"
+gxx_linux-64 = "*"
+
+[feature.build.target.linux-aarch64.dependencies]
+gcc_linux-aarch64 = "*"
+gxx_linux-aarch64 = "*"
+
+# macOS: Clang
+[feature.build.target.osx-64.dependencies]
+clang_osx-64 = "*"
+clangxx_osx-64 = "*"
+
+[feature.build.target.osx-arm64.dependencies]
+clang_osx-arm64 = "*"
+clangxx_osx-arm64 = "*"
+
 [feature.build.target.win-64.dependencies]
+vs2022_win-64 = "*"
 winpthreads-devel = "*"
 
 # build and test
