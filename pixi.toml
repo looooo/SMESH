@@ -45,7 +45,7 @@ zlib = "*"
 catch2 = "<3.0"
 
 [feature.build.target.win-64.dependencies]
-pthreads-win32 = "*"
+winpthreads-devel = "*"
 
 # build and test
 [feature.build.tasks]
