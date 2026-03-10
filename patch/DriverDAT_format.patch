@@ -1,0 +1,48 @@
+diff --git a/src/DriverDAT/DriverDAT_W_SMDS_Mesh.cxx b/src/DriverDAT/DriverDAT_W_SMDS_Mesh.cxx
+--- a/src/DriverDAT/DriverDAT_W_SMDS_Mesh.cxx
++++ b/src/DriverDAT/DriverDAT_W_SMDS_Mesh.cxx
+@@ -96,7 +96,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
+     if ( !myRenumber )
+       num = node->GetID();
+ 
+-    fprintf(aFileId, "%d %.14e %.14e %.14e\n", num, node->X(), node->Y(), node->Z());
++    fprintf(aFileId, "%lld %.14e %.14e %.14e\n", static_cast<long long>(num), node->X(), node->Y(), node->Z());
+ 
+     if ( !nodeNumByID.empty() )
+       nodeNumByID[ node->GetID() ] = num;
+@@ -114,7 +114,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
+     if ( !myRenumber )
+       num = elem->GetID();
+ 
+-    fprintf(aFileId, "%d %d ", num, 100 + elem->NbNodes());
++    fprintf(aFileId, "%lld %d ", static_cast<long long>(num), 100 + elem->NbNodes());
+ 
+     for ( SMDS_ElemIteratorPtr it = elem->nodesIterator(); it->more(); )
+     {
+@@ -132,7 +132,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
+     if ( !myRenumber )
+       num = elem->GetID();
+ 
+-    fprintf(aFileId, "%d %d ", num, (elem->IsPoly() ? 400 : 200 ) + elem->NbNodes() );
++    fprintf(aFileId, "%lld %d ", static_cast<long long>(num), (elem->IsPoly() ? 400 : 200 ) + elem->NbNodes() );
+ 
+     for( SMDS_ElemIteratorPtr it = elem->nodesIterator(); it->more(); )
+     {
+@@ -154,7 +154,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
+ 
+     if ( elem->IsPoly() )
+     {
+-      fprintf(aFileId, "%d %d ", num, 500 + elem->NbNodes());
++      fprintf(aFileId, "%lld %d ", static_cast<long long>(num), 500 + elem->NbNodes());
+ 
+       if (( v = myMesh->DownCast< SMDS_MeshVolume >( elem )))
+       {
+@@ -168,7 +168,7 @@ Driver_Mesh::Status DriverDAT_W_SMDS_Mesh::Perform()
+     }
+     else
+     {
+-      fprintf(aFileId, "%d %d ", num, 300 + elem->NbNodes());
++      fprintf(aFileId, "%lld %d ", static_cast<long long>(num), 300 + elem->NbNodes());
+     }
+ 
+     for( SMDS_ElemIteratorPtr it = elem->nodesIterator(); it->more(); )

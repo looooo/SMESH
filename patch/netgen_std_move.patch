@@ -1,0 +1,38 @@
+diff --git a/libsrc/general/table.hpp b/libsrc/general/table.hpp
+--- a/libsrc/general/table.hpp
++++ b/libsrc/general/table.hpp
+@@ -35,20 +35,20 @@ public:
+ public:
+   ///
+   BASE_TABLE (BASE_TABLE && table2)
+-    : data(move(table2.data)), oneblock(table2.oneblock)
++    : data(std::move(table2.data)), oneblock(table2.oneblock)
+   {
+     table2.oneblock = nullptr;
+   }
+ 
+   BASE_TABLE (int size);
+   ///
+   BASE_TABLE (const NgFlatArray<int> & entrysizes, int elemsize);
+   ///
+   ~BASE_TABLE ();
+ 
+   BASE_TABLE & operator= (BASE_TABLE && table2)
+   {
+-    data = move(table2.data);
++    data = std::move(table2.data);
+     Swap (oneblock, table2.oneblock);
+     return *this;
+   }
+diff --git a/libsrc/general/ngarray.hpp b/libsrc/general/ngarray.hpp
+--- a/libsrc/general/ngarray.hpp
++++ b/libsrc/general/ngarray.hpp
+@@ -452,7 +452,7 @@ namespace netgen
+           if constexpr(std::is_trivially_copyable<T>::value)
+             memcpy (p, data, sizeof(T)*mins);
+           else
+-            for (size_t i = 0; i < mins; i++) p[i] = move(data[i]);
++            for (size_t i = 0; i < mins; i++) p[i] = std::move(data[i]);
+ 
+ 	  if (ownmem)
+ 	    delete [] data;

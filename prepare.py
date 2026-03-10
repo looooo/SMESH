@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 import patch
 
@@ -41,6 +42,16 @@ def prepare_netgen():
     success = pset.apply(strip=0, root='src/Netgen')
     if not success:
         raise RuntimeError('Failed to apply occt7.8.1 patch for Netgen.')
+
+    # Fix std::move warnings for Clang
+    result = subprocess.run(
+        ['patch', '-p1', '-i', os.path.join(os.getcwd(), 'patch', 'netgen_std_move.patch')],
+        cwd=os.path.join(os.getcwd(), 'src', 'Netgen'),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f'Failed to apply Netgen std::move patch: {result.stderr}')
 
 def prepare_kernel():
     """
@@ -134,6 +145,18 @@ def prepare_smesh():
     success = pset.apply(strip=0, root='src/SMESH')
     if not success:
         raise RuntimeError('Failed to apply SMESH_Mesh patch.')
+
+    # DriverDAT format fix (use subprocess - Python patch library has path issues)
+    import subprocess
+    for patch_name in ['DriverDAT_format', 'SMESH_Mesh_logical_not']:
+        result = subprocess.run(
+            ['patch', '-p1', '-i', os.path.join(os.getcwd(), 'patch', f'{patch_name}.patch')],
+            cwd=os.path.join(os.getcwd(), 'src', 'SMESH'),
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f'Failed to apply {patch_name} patch: {result.stderr}')
 
     pset = patch.fromfile('patch/SMESH_MeshAlgos.patch')
     success = pset.apply(strip=0, root='src/SMESH')

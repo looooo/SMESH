@@ -99,6 +99,13 @@ endif()
 # PTHREAD
 # --------------------------------------------------------------------------- #
 if(UNIX)
+  # Use PTHREAD vars if set (avoids CMake "unused variable" warning when pixi passes them on all platforms)
+  if(DEFINED PTHREAD_INCLUDE_DIRS AND PTHREAD_INCLUDE_DIRS)
+    include_directories(${PTHREAD_INCLUDE_DIRS})
+  endif()
+  if(DEFINED PTHREAD_LIB_DIRS AND PTHREAD_LIB_DIRS)
+    link_directories(${PTHREAD_LIB_DIRS})
+  endif()
   find_package(Threads REQUIRED)
 else(UNIX)
   set(PTHREAD_INCLUDE_DIRS "" CACHE PATH "pthread include directory.")

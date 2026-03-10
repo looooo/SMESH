@@ -1,0 +1,12 @@
+diff --git a/src/SMESH/SMESH_Mesh.cxx b/src/SMESH/SMESH_Mesh.cxx
+--- a/src/SMESH/SMESH_Mesh.cxx
++++ b/src/SMESH/SMESH_Mesh.cxx
+@@ -744,7 +744,7 @@ void SMESH_Mesh::RemoveHypothesis(const TopoDS_Shape & aSubShape, const int anHy
+ 
+   // shape 
+ 
+-  bool                     isAlgo = ( !anHyp->GetType() == SMESHDS_Hypothesis::PARAM_ALGO );
++  bool                     isAlgo = ( !(anHyp->GetType() == SMESHDS_Hypothesis::PARAM_ALGO) );
+   SMESH_subMesh::algo_event event = isAlgo ? SMESH_subMesh::REMOVE_ALGO : SMESH_subMesh::REMOVE_HYP;
+ 
+   SMESH_subMesh *subMesh = GetSubMesh(aSubShape);
