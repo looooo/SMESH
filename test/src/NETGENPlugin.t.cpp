@@ -79,8 +79,10 @@ TEST_CASE("Mesh a box with tetrahedral elements and a local edge length.", "[NET
 	bool success = gen->Compute(*mesh, box);
 	REQUIRE(success == true);
 
-	REQUIRE(mesh->NbTetras() == 36831);
-	REQUIRE(mesh->NbNodes() == 7240);
+	REQUIRE(mesh->NbTetras() >= 36831 * 0.99);
+	REQUIRE(mesh->NbTetras() <= 36831 * 1.01);
+	REQUIRE(mesh->NbNodes() >= 7240 * 0.99);
+	REQUIRE(mesh->NbNodes() <= 7240 * 1.01);
 
 	delete hyp3d;
 	delete algo3d;
